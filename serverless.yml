@@ -1,0 +1,85 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: kneubots
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: coachella-wishlist
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: coachella-wishlist
+
+stages:
+  default:
+    params:
+      tableName: "users-table-${sls:stage}"
+      wishlistTableName: "wishlist-table-${sls:stage}"
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  httpApi:
+    cors: true
+  # Uncomment to easily set up a custom domain. Read the docs for more details:
+  # https://www.serverless.com/framework/docs/providers/aws/guide/domains
+  # domain: api.example.com
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [UsersTable, Arn]
+            - Fn::GetAtt: [WishlistTable, Arn]
+            - Fn::Sub: "${WishlistTable.Arn}/index/*"
+  environment:
+    USERS_TABLE: ${param:tableName}
+    WISHLIST_TABLE: ${param:wishlistTableName}
+
+package:
+  patterns:
+    - '!frontend/**'
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - httpApi: "*"
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${param:tableName}
+    WishlistTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: artistId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: artistId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${param:wishlistTableName}
+        GlobalSecondaryIndexes:
+          - IndexName: ArtistIndex
+            KeySchema:
+              - AttributeName: artistId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL

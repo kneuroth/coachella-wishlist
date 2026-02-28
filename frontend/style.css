@@ -1,0 +1,467 @@
+:root {
+  --bg:        #100e0c;
+  --surface:   #1a1714;
+  --surface2:  #221e1a;
+  --border:    #2c2620;
+  --border2:   #3a3028;
+  --gold:      #e8b84b;
+  --gold-dim:  #7a5e22;
+  --gold-bg:   rgba(232, 184, 75, 0.10);
+  --sage:      #5d8c65;
+  --sage-bg:   rgba(93, 140, 101, 0.10);
+  --muted:     #5e5044;
+  --cream:     #ede0cc;
+  --cream2:    #9a8878;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle film grain */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.028;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.hidden { display: none !important; }
+
+
+/* ── SETUP MODAL ───────────────────────────────────────────────────────────── */
+
+.modal {
+  position: fixed; inset: 0;
+  background: rgba(8, 6, 4, 0.92);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 500;
+  animation: fade-in 0.35s ease both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  padding: 3rem 3.5rem 2.75rem;
+  max-width: 380px;
+  width: calc(100% - 2rem);
+  text-align: center;
+  animation: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.08s;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-glyph {
+  font-size: 1.3rem;
+  color: var(--gold);
+  letter-spacing: 0.4em;
+  margin-bottom: 1.25rem;
+}
+
+.modal-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--cream);
+  margin-bottom: 0.2rem;
+}
+
+.modal-card h2 em {
+  display: block;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold);
+}
+
+.modal-sub {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  margin: 1.75rem 0 0.9rem;
+}
+
+.modal-card input {
+  display: block;
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  color: var(--cream);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.9rem;
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 0.75rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.modal-card input:focus      { border-color: var(--gold); }
+.modal-card input::placeholder { color: var(--muted); }
+
+.modal-card button {
+  display: block;
+  width: 100%;
+  background: var(--gold);
+  color: var(--bg);
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 0.8rem;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.modal-card button:hover  { opacity: 0.87; }
+.modal-card button:active { transform: scale(0.98); }
+
+
+/* ── HEADER ─────────────────────────────────────────────────────────────────── */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 1.1rem 2rem;
+}
+
+.header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header-eyebrow {
+  font-size: 0.5rem;
+  letter-spacing: 0.42em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+
+.header-title h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--cream);
+}
+
+.header-title h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-shrink: 0;
+}
+
+#user-label {
+  font-size: 0.63rem;
+  color: var(--cream2);
+  letter-spacing: 0.06em;
+}
+
+.year-tag {
+  border: 1px solid var(--border2);
+  padding: 0.2rem 0.55rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  color: var(--gold-dim);
+}
+
+
+/* ── MAIN ───────────────────────────────────────────────────────────────────── */
+
+main {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.75rem 2rem;
+}
+
+
+/* ── LOADING ────────────────────────────────────────────────────────────────── */
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+}
+
+.loading-state span {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.38em;
+  color: var(--muted);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.25; }
+  50%       { opacity: 0.85; }
+}
+
+
+/* ── CONTROLS ───────────────────────────────────────────────────────────────── */
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.add-form { display: flex; }
+
+.add-form input {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-right: none;
+  color: var(--cream);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.74rem;
+  padding: 0.44rem 0.75rem;
+  width: 210px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.add-form input:focus       { border-color: var(--gold-dim); }
+.add-form input::placeholder { color: var(--muted); }
+
+.add-form button {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--gold);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.15rem;
+  line-height: 1;
+  width: 34px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.add-form button:hover { background: var(--border2); }
+
+.legend {
+  display: flex;
+  gap: 1.4rem;
+  align-items: center;
+}
+
+.leg {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.leg.must { color: var(--gold); }
+.leg.like { color: var(--sage); }
+
+
+/* ── GRID ───────────────────────────────────────────────────────────────────── */
+
+.grid-scroll {
+  border: 1px solid var(--border);
+  overflow: auto;
+  max-height: calc(100vh - 252px);
+}
+
+table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+}
+
+
+/* Sticky header row */
+th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border2);
+  border-right: 1px solid var(--border);
+  padding: 0.58rem 0.8rem;
+  font-size: 0.58rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  white-space: nowrap;
+  text-align: center;
+  user-select: none;
+}
+
+/* Sticky top-left corner */
+th.th-artist {
+  position: sticky;
+  left: 0;
+  z-index: 20;
+  text-align: left;
+  padding-left: 1rem;
+  min-width: 165px;
+  background: var(--surface);
+}
+
+th.th-heat   { min-width: 46px; font-size: 0.85rem; }
+th.th-friend { min-width: 72px; }
+th.th-friend.is-me { color: var(--gold); }
+
+
+/* Body cells */
+td {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  height: 44px;
+  text-align: center;
+  vertical-align: middle;
+  transition: background 0.08s;
+}
+
+tr:hover td { background: var(--surface2); }
+
+
+/* Sticky first column */
+td.td-artist {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: var(--bg);
+  text-align: left;
+  padding: 0 1rem;
+  font-size: 0.77rem;
+  color: var(--cream);
+  white-space: nowrap;
+  min-width: 165px;
+  border-right: 1px solid var(--border2);
+}
+
+tr:hover td.td-artist { background: var(--surface2); }
+
+td.td-heat { min-width: 46px; }
+
+.heat-badge {
+  display: inline-block;
+  background: var(--gold-bg);
+  color: var(--gold);
+  border: 1px solid rgba(232, 184, 75, 0.2);
+  border-radius: 2px;
+  padding: 0.1rem 0.42rem;
+  font-size: 0.63rem;
+  font-weight: 500;
+}
+
+
+/* ── RANKING CELLS ──────────────────────────────────────────────────────────── */
+
+td.td-rank {
+  min-width: 72px;
+  width: 72px;
+}
+
+td.td-rank.r-must_see          { background: var(--gold-bg); }
+td.td-rank.r-would_like_to_see { background: var(--sage-bg); }
+
+tr:hover td.td-rank.r-must_see          { background: rgba(232, 184, 75,  0.16); }
+tr:hover td.td-rank.r-would_like_to_see { background: rgba(93,  140, 101, 0.16); }
+
+.rank-sym {
+  display: inline-block;
+  font-size: 0.92rem;
+  animation: pop-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1);   }
+}
+
+td.td-rank.r-must_see          .rank-sym { color: var(--gold); }
+td.td-rank.r-would_like_to_see .rank-sym { color: var(--sage); }
+td.td-rank.r-would_skip        .rank-sym { color: var(--muted); }
+
+
+/* Current user's editable cells */
+td.td-rank.mine {
+  cursor: pointer;
+}
+
+td.td-rank.mine:hover {
+  background: var(--surface2) !important;
+  outline: 1px solid var(--gold-dim);
+  outline-offset: -2px;
+}
+
+td.td-rank.mine:active { background: var(--border2) !important; }
+
+.rank-add {
+  display: inline-block;
+  color: var(--border2);
+  font-size: 1.1rem;
+  transition: color 0.15s;
+}
+
+td.td-rank.mine:hover .rank-add { color: var(--gold-dim); }
+
+
+/* ── EMPTY STATE ────────────────────────────────────────────────────────────── */
+
+.empty-state {
+  padding: 3.5rem 2rem;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+
+.empty-state p {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+
+/* ── ROW ENTRY ANIMATION ────────────────────────────────────────────────────── */
+
+@keyframes row-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
