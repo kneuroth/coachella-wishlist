@@ -18,9 +18,8 @@ async function loadAndRender() {
   try {
     await fetchAll();
 
-    // Merge current user so their bubble always appears
+    // Ensure current user's wishlist array exists for optimistic updates
     if (currentUser) {
-      state.users[currentUser.userId]     = state.users[currentUser.userId] || currentUser.name;
       state.wishlists[currentUser.userId] = state.wishlists[currentUser.userId] || [];
     }
 

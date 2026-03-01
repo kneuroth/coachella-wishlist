@@ -30,11 +30,6 @@ function fmt(id) {
 // ── RENDER CARDS ──────────────────────────────────────────────────────────────
 
 function renderCards() {
-  // Always include current user even if they have no ratings yet
-  if (currentUser && !state.users[currentUser.userId]) {
-    state.users[currentUser.userId] = currentUser.name;
-  }
-
   const grid    = document.getElementById('artist-grid');
   const emptyEl = document.getElementById('empty-state');
 
@@ -90,12 +85,14 @@ function renderCards() {
       friendsRow.className = 'card-friends';
 
       userIds.forEach(uid => {
+        if (uid === myUserId) return; // current user already shown via badge
         const ranking = getRanking(uid, artistId);
-        const name    = state.users[uid] || '?';
-        const bubble  = document.createElement('div');
-        bubble.className = `friend-bubble rank-${ranking || 'none'}`;
+        if (!ranking) return; // skip users who haven't rated this artist
+        const name   = state.users[uid] || '?';
+        const bubble = document.createElement('div');
+        bubble.className = `friend-bubble rank-${ranking}`;
         bubble.textContent = name[0].toUpperCase();
-        bubble.title = `${name}: ${ranking ? LABEL[ranking] : 'Not rated'}`;
+        bubble.title = `${name}: ${LABEL[ranking]}`;
         friendsRow.appendChild(bubble);
       });
 
