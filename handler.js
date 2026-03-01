@@ -23,6 +23,10 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  res.on("finish", () => console.log(`${req.method} ${req.path} → ${res.statusCode}`));
+  next();
+});
 
 app.get("/users/:userId", async (req, res) => {
   const params = {
