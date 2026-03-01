@@ -83,3 +83,71 @@ Live dev mode (tunnels to AWS Lambda locally):
 ```
 serverless dev
 ```
+
+---
+
+## Scripts
+
+### Seed 2026 artists (`scripts/seed-artists.js`)
+
+Pre-populates the DynamoDB wishlist table with all 2026 lineup artists so the grid shows up immediately without waiting for anyone to rate them.
+
+- Writes under userId `coachella-2026-seed` (no matching users-table entry → no friend bubble in the UI)
+- All ranked `would_skip` so heat scores are unaffected
+- Artist list sourced from `Spreadsheetchella 2026.xlsx`
+- Boys Noize deduplicated (plays both Friday and Saturday)
+- Sub Focus + Dimension + Culture Shock + 1991 combined into `worship-2026`
+
+Safe to re-run — PutItem just overwrites existing entries.
+
+```bash
+AWS_PROFILE=coachella WISHLIST_TABLE=wishlist-table-dev node scripts/seed-artists.js
+# prod:
+AWS_PROFILE=coachella WISHLIST_TABLE=wishlist-table-prod node scripts/seed-artists.js
+```
+
+---
+
+## AWS Credentials Setup (one-time, WSL)
+
+### 1. Create IAM user
+
+IAM → Users → Create user → `coachella-wishlist-cli` → no console access.
+
+### 2. Attach permission policy
+
+Create policy (JSON), name it `coachella-wishlist-seed`, attach to the user:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["dynamodb:PutItem", "dynamodb:BatchWriteItem"],
+      "Resource": [
+        "arn:aws:dynamodb:us-east-1:*:table/wishlist-table-dev",
+        "arn:aws:dynamodb:us-east-1:*:table/wishlist-table-prod"
+      ]
+    }
+  ]
+}
+```
+
+> `sls deploy` needs broader permissions — use a separate user or personal AWS credentials for deploys.
+
+### 3. Create access key
+
+User → Security credentials → Create access key → CLI → copy both values (secret shown once).
+
+### 4. Configure in WSL
+
+```bash
+aws configure --profile coachella
+# AWS Access Key ID:     <key>
+# AWS Secret Access Key: <secret>
+# Default region:        us-east-1
+# Default output:        json
+```
+
+Credentials saved to `~/.aws/credentials` and `~/.aws/config`. Use `AWS_PROFILE=coachella` when running scripts.
