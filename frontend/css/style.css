@@ -134,6 +134,42 @@ body {
 .modal-card button:hover  { background: var(--green-hover); }
 .modal-card button:active { transform: scale(0.98); }
 
+.existing-users { margin-top: 1.5rem; }
+
+.modal-divider {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.existing-users-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.modal-card .existing-user-btn {
+  display: inline-block;
+  width: auto;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--green);
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  margin: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.modal-card .existing-user-btn:hover {
+  background: transparent;
+  border-color: var(--green);
+  color: var(--green-hover);
+}
+
 
 /* ── HEADER ─────────────────────────────────────────────────────────────────── */
 

@@ -365,6 +365,29 @@ async function init() {
   if (!currentUser) {
     modal.classList.remove('hidden');
 
+    // Fetch existing users in the background and populate the sign-in list
+    fetchAll()
+      .then(() => {
+        const realUsers = Object.entries(state.users)
+          .filter(([uid]) => uid !== 'coachella-2026-seed');
+        if (realUsers.length === 0) return;
+        const list = document.getElementById('existing-users-list');
+        realUsers.forEach(([uid, name]) => {
+          const btn = document.createElement('button');
+          btn.className   = 'existing-user-btn';
+          btn.textContent = name;
+          btn.addEventListener('click', async () => {
+            currentUser = { userId: uid, name };
+            saveCurrentUser(currentUser);
+            modal.classList.add('hidden');
+            await loadAndRender();
+          });
+          list.appendChild(btn);
+        });
+        document.getElementById('existing-users').classList.remove('hidden');
+      })
+      .catch(err => console.error('Failed to load existing users:', err));
+
     const join = async () => {
       const name = nameIn.value.trim();
       if (!name) return;
@@ -376,7 +399,7 @@ async function init() {
         await loadAndRender();
       } catch (err) {
         console.error(err);
-        joinBtn.textContent = 'Join the group';
+        joinBtn.textContent = 'Join';
         joinBtn.disabled    = false;
       }
     };
