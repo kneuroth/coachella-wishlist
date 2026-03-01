@@ -170,6 +170,74 @@ body {
   color: var(--green-hover);
 }
 
+.add-artist-card {
+  padding: 2rem 2.5rem;
+}
+
+.add-artist-error {
+  font-size: 0.75rem;
+  color: var(--gold);
+  margin-top: 0.4rem;
+  margin-bottom: 0;
+}
+
+.add-artist-cancel {
+  margin-top: 0.5rem;
+  background: transparent !important;
+  border: none !important;
+  color: var(--muted) !important;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+
+.add-artist-cancel:hover {
+  color: var(--green) !important;
+}
+
+.add-matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.modal-card .add-match-btn {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--green);
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.modal-card .add-match-btn:hover {
+  background: var(--card-bg);
+  border-color: var(--green);
+}
+
+.add-artist-anyway {
+  display: block;
+  width: 100%;
+  background: transparent !important;
+  border: 1px dashed var(--border-strong) !important;
+  color: var(--muted) !important;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.add-artist-anyway:hover {
+  color: var(--green) !important;
+  border-color: var(--green) !important;
+}
+
 
 /* ── HEADER ─────────────────────────────────────────────────────────────────── */
 
@@ -293,6 +361,35 @@ main {
 #search-bar {
   position: relative;
   margin-bottom: 1.25rem;
+}
+
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-row .search-wrap {
+  flex: 1;
+}
+
+.add-artist-btn {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--green);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.add-artist-btn:hover {
+  border-color: var(--green);
+  color: var(--green-hover);
 }
 
 .search-wrap {

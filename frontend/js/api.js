@@ -27,3 +27,7 @@ async function putRanking(userId, artistId, ranking) {
 async function deleteRanking(userId, artistId) {
   return api('DELETE', `/wishlists/${userId}/${artistId}`);
 }
+
+async function addSeedArtist(artistId) {
+  return api('PUT', `/wishlists/coachella-2026-seed/${artistId}`, { ranking: 'would_skip' });
+}

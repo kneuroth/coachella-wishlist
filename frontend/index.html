@@ -60,6 +60,7 @@
 
         <div id="grid-container" class="hidden">
           <div id="search-bar">
+            <div class="search-row">
             <div class="search-wrap">
               <svg
                 class="search-icon"
@@ -90,6 +91,8 @@
                 autocomplete="off"
                 spellcheck="false"
               />
+            </div>
+            <button id="add-artist-btn" class="add-artist-btn" title="Add artist">+</button>
             </div>
             <div id="autocomplete-dropdown" class="autocomplete hidden"></div>
           </div>
@@ -124,7 +127,41 @@
       </button>
     </div>
 
+    <!-- Add artist modal -->
+    <div id="add-artist-modal" class="modal hidden">
+      <div class="modal-card add-artist-card">
+
+        <div id="add-artist-form">
+          <p class="modal-sub">Add an artist</p>
+          <input
+            type="text"
+            id="add-artist-name"
+            placeholder="Artist name"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <p id="add-artist-error" class="add-artist-error hidden">Already in the list</p>
+          <button id="add-artist-submit">Add</button>
+          <button id="add-artist-cancel" class="add-artist-cancel">Cancel</button>
+        </div>
+
+        <div id="add-artist-matches" class="hidden">
+          <p class="modal-sub">Did you mean…</p>
+          <div id="add-artist-matches-list" class="add-matches-list"></div>
+          <button id="add-artist-anyway" class="add-artist-anyway">No, add anyway</button>
+          <button id="add-artist-back" class="add-artist-cancel">← Back</button>
+        </div>
+
+      </div>
+    </div>
+
     <script src="js/api.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/sheet.js"></script>
+    <script src="js/add-artist.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>
