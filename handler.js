@@ -73,12 +73,14 @@ app.post("/users", async (req, res) => {
 
 const VALID_RANKINGS = ["must_see", "would_like_to_see", "would_skip"];
 
-// DELETE /wishlists — clear all wishlist data
+// DELETE /wishlists — clear all wishlist data (preserves coachella-2026-seed)
 app.delete("/wishlists", async (req, res) => {
   try {
     const { Items } = await docClient.send(new ScanCommand({
       TableName: WISHLIST_TABLE,
       ProjectionExpression: "userId, artistId",
+      FilterExpression: "userId <> :seed",
+      ExpressionAttributeValues: { ":seed": "coachella-2026-seed" },
     }));
     if (!Items || Items.length === 0) return res.status(204).send();
 
