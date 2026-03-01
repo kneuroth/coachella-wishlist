@@ -18,8 +18,9 @@ async function loadAndRender() {
   try {
     await fetchAll();
 
-    // Ensure current user's wishlist array exists for optimistic updates
+    // Ensure current user exists in state for bubble rendering and optimistic updates
     if (currentUser) {
+      state.users[currentUser.userId]     = state.users[currentUser.userId] || currentUser.name;
       state.wishlists[currentUser.userId] = state.wishlists[currentUser.userId] || [];
     }
 

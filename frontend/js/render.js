@@ -85,7 +85,6 @@ function renderCards() {
       friendsRow.className = 'card-friends';
 
       userIds.forEach(uid => {
-        if (uid === myUserId) return; // current user already shown via badge
         const ranking = getRanking(uid, artistId);
         if (!ranking) return; // skip users who haven't rated this artist
         const name   = state.users[uid] || '?';
