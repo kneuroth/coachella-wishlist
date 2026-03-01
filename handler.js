@@ -10,6 +10,7 @@ const {
   BatchWriteCommand,
 } = require("@aws-sdk/lib-dynamodb");
 
+const cors = require("cors");
 const express = require("express");
 const serverless = require("serverless-http");
 
@@ -20,6 +21,7 @@ const WISHLIST_TABLE = process.env.WISHLIST_TABLE;
 const client = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(client);
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/users/:userId", async (req, res) => {
