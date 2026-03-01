@@ -79,7 +79,8 @@ app.delete("/wishlists", async (req, res) => {
     const { Items } = await docClient.send(new ScanCommand({
       TableName: WISHLIST_TABLE,
       ProjectionExpression: "userId, artistId",
-      FilterExpression: "userId <> :seed",
+      FilterExpression: "#uid <> :seed",
+      ExpressionAttributeNames: { "#uid": "userId" },
       ExpressionAttributeValues: { ":seed": "coachella-2026-seed" },
     }));
     if (!Items || Items.length === 0) return res.status(204).send();
