@@ -90,6 +90,13 @@ function heatScore(artistId) {
     .length;
 }
 
+function likeScore(artistId) {
+  return Object.values(state.wishlists)
+    .flat()
+    .filter(e => e.artistId === artistId && e.ranking === 'would_like_to_see')
+    .length;
+}
+
 
 // ── FORMAT ────────────────────────────────────────────────────────────────────
 
@@ -119,9 +126,9 @@ function renderCards() {
     !query || fmt(id).toLowerCase().includes(query)
   );
 
-  // Sort: most must_see heat first, then alphabetically
+  // Sort: most must_see first, then most would_like_to_see, then alphabetically
   const sorted = [...filtered].sort((a, b) =>
-    heatScore(b) - heatScore(a) || a.localeCompare(b)
+    heatScore(b) - heatScore(a) || likeScore(b) - likeScore(a) || a.localeCompare(b)
   );
 
   if (sorted.length === 0) {
